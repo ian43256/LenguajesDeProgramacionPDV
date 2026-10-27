@@ -84,10 +84,10 @@ total_venta = StringVar()
 cambio_venta = StringVar()
 ticket_texto = StringVar()
 
-subtotal_venta.set("Subtotal: $0.00")
+subtotal_venta.set("Subtotal sin IVA: $0.00")
 descuento_venta.set("Descuento VIP: -$0.00")
-iva_venta.set("IVA (16%): $0.00")
-total_venta.set("Total: $0.00")
+iva_venta.set("IVA (16% incluido): $0.00")
+total_venta.set("Total con IVA: $0.00")
 cambio_venta.set("Cambio: $0.00")
 ticket_texto.set("\n\n   Aún no hay tickets.\n\n   Confirma una venta y\n   el ticket aparecerá aquí.\n\n")
 
@@ -110,34 +110,39 @@ def actualizar_inventario():
             labels_stock[nombre].config(fg="gray")
 
 def calcular_subtotal():
-    """Suma precio x cantidad de cada producto (sin descuento ni IVA)."""
+    """Suma los precios del catálogo, que ya incluyen IVA."""
     subtotal = 0
     for nombre, precio in PRODUCTOS.items():
         subtotal += precio * vars_productos[nombre].get()
     return subtotal
 
+def calcular_base_sin_iva(importe):
+    """Obtiene el precio antes de IVA a partir de un importe que ya lo incluye."""
+    return importe / (1 + IVA)
+
 def calcular_descuento():
-    """10% de descuento si el cliente es VIP."""
+    """Calcula el descuento VIP sobre la base antes de IVA."""
     descuento = 0
     if tipo_cliente.get() == 2:
-        descuento = calcular_subtotal() * 0.10
+        descuento = calcular_base_sin_iva(calcular_subtotal()) * 0.10
     return descuento
 
 def calcular_iva():
-    """IVA sobre el subtotal ya con descuento."""
-    return (calcular_subtotal() - calcular_descuento()) * IVA
+    """Calcula el IVA incluido en el precio después del descuento."""
+    base = calcular_base_sin_iva(calcular_subtotal()) - calcular_descuento()
+    return base * IVA
 
 def calcular_total():
-    """Actualiza subtotal, descuento, IVA y total en pantalla; regresa el total con IVA."""
-    subtotal = calcular_subtotal()
+    """Actualiza el desglose de precios con IVA incluido y regresa el total."""
+    subtotal = calcular_base_sin_iva(calcular_subtotal())
     descuento = calcular_descuento()
     iva = calcular_iva()
     total = subtotal - descuento + iva
 
-    subtotal_venta.set(f"Subtotal: ${subtotal:.2f}")
+    subtotal_venta.set(f"Subtotal sin IVA: ${subtotal:.2f}")
     descuento_venta.set(f"Descuento VIP: -${descuento:.2f}")
-    iva_venta.set(f"IVA (16%): ${iva:.2f}")
-    total_venta.set(f"Total: ${total:.2f}")
+    iva_venta.set(f"IVA (16% incluido): ${iva:.2f}")
+    total_venta.set(f"Total con IVA: ${total:.2f}")
     cambio_venta.set("Cambio: $0.00")
     return total
 
@@ -230,9 +235,12 @@ def confirmar_venta():
 
     numero = numero_ticket.get()
 
+    subtotal_sin_iva = calcular_base_sin_iva(subtotal)
     detalle = []
     ticket = "==============================\n"
     ticket = ticket + "         SWEET SHOP\n"
+    ticket = ticket + "==============================\n"
+    ticket = ticket + "   PRECIOS CON IVA INCLUIDO\n"
     ticket = ticket + "==============================\n"
     ticket = ticket + f"Ticket: #{numero:04d}\n"
     ticket = ticket + f"Cajero: {cajero}\n"
@@ -241,16 +249,19 @@ def confirmar_venta():
     for nombre in dulces:
         cantidad = vars_productos[nombre].get()
         importe = PRODUCTOS[nombre] * cantidad
+        base_producto = calcular_base_sin_iva(importe)
+        iva_producto = importe - base_producto
         linea = f"{cantidad} x {nombre}"
         ticket = ticket + f"{linea:<20}${importe:>8.2f}\n"
+        ticket = ticket + f"   Sin IVA: ${base_producto:.2f} + IVA 16%: ${iva_producto:.2f}\n"
         detalle.append(f"{cantidad}x {nombre}")
     ticket = ticket + "------------------------------\n"
-    ticket = ticket + f"{'Subtotal:':<20}${subtotal:>8.2f}\n"
+    ticket = ticket + f"{'Subtotal sin IVA:':<20}${subtotal_sin_iva:>8.2f}\n"
     if tipo_cliente.get() == 2:
-        ticket = ticket + f"{'Descuento VIP 10%:':<20}-${descuento:>7.2f}\n"
-    ticket = ticket + f"{'IVA 16%:':<20}${iva:>8.2f}\n"
+        ticket = ticket + f"{'Descuento VIP:':<20}-${descuento:>7.2f}\n"
+    ticket = ticket + f"{'IVA 16% incluido:':<20}${iva:>8.2f}\n"
     ticket = ticket + "==============================\n"
-    ticket = ticket + f"{'TOTAL:':<20}${total:>8.2f}\n"
+    ticket = ticket + f"{'TOTAL CON IVA:':<20}${total:>8.2f}\n"
     ticket = ticket + f"{'Paga con:':<20}${pagado:>8.2f}\n"
     ticket = ticket + f"{'Cambio:':<20}${cambio:>8.2f}\n"
     ticket = ticket + "==============================\n"
@@ -263,14 +274,16 @@ def confirmar_venta():
         with open("ventas.txt", "a", encoding="utf-8") as file:
             file.write(
                 f"Ticket: #{numero:04d} | Cajero: {cajero} | Cliente: {cliente} | Membresía: {membresia} | "
-                f"Dulces: {', '.join(detalle)} | Subtotal: ${subtotal:.2f} | IVA: ${iva:.2f} | "
-                f"Total: ${total:.2f} | Pagó: ${pagado:.2f} | Cambio: ${cambio:.2f} | Notas: {notas}\n"
+                f"Dulces: {', '.join(detalle)} | Subtotal sin IVA: ${subtotal_sin_iva:.2f} | "
+                f"Descuento: ${descuento:.2f} | IVA 16% incluido: ${iva:.2f} | "
+                f"Total con IVA: ${total:.2f} | Pagó: ${pagado:.2f} | Cambio: ${cambio:.2f} | Notas: {notas}\n"
             )
 
         with open("clientes.txt", "a", encoding="utf-8") as file:
             file.write(
                 f"Cliente: {cliente} | Membresía: {membresia} | Ticket: #{numero:04d} | "
-                f"Compra: ${total:.2f} | Pagó: ${pagado:.2f} | Cambio: ${cambio:.2f} | Atendió: {cajero}\n"
+                f"Compra con IVA: ${total:.2f} | Subtotal sin IVA: ${subtotal_sin_iva:.2f} | "
+                f"IVA incluido: ${iva:.2f} | Pagó: ${pagado:.2f} | Cambio: ${cambio:.2f} | Atendió: {cajero}\n"
             )
 
         with open("tickets.txt", "a", encoding="utf-8") as file:
@@ -284,7 +297,11 @@ def confirmar_venta():
             if INVENTARIO[nombre] <= STOCK_BAJO:
                 aviso = aviso + f"\n- {nombre}: quedan {INVENTARIO[nombre]}"
 
-        mensaje = f"¡Venta registrada! Ticket #{numero:04d}\nCambio a entregar: ${cambio:.2f}\nSe guardó en ventas.txt, clientes.txt y tickets.txt."
+        mensaje = (
+            f"¡Venta registrada! Ticket #{numero:04d}\n"
+            f"Total con IVA: ${total:.2f}\nCambio a entregar: ${cambio:.2f}\n"
+            "Se guardó en ventas.txt, clientes.txt y tickets.txt."
+        )
         if aviso != "":
             mensaje = mensaje + "\n\nStock bajo:" + aviso
 
@@ -408,7 +425,15 @@ for nombre, precio in PRODUCTOS.items():
         fila = 5 + contador - PRODUCTOS_POR_COLUMNA
         columna = 5
 
-    Label(miFrame, text=f"{nombre} (${precio})", bg="white", width=20, anchor="w").grid(row=fila, column=columna, sticky="w", padx=(10, 0), pady=2)
+    base_producto = calcular_base_sin_iva(precio)
+    iva_producto = precio - base_producto
+    Label(
+        miFrame,
+        text=f"{nombre} ${precio:.2f} c/IVA\nSin IVA ${base_producto:.2f} + IVA ${iva_producto:.2f}",
+        bg="white",
+        width=30,
+        anchor="w"
+    ).grid(row=fila, column=columna, sticky="w", padx=(10, 0), pady=2)
 
     Button(miFrame, text="-", width=2, command=lambda n=nombre: quitar_producto(n), bg=COLOR_SUAVE,
            font=("Arial", 9, "bold"), cursor="hand2").grid(row=fila, column=columna + 1)
@@ -463,3 +488,4 @@ Label(panelTicket, textvariable=ticket_texto, font=("Courier", 10), bg="white", 
 
 actualizar_inventario()
 root.mainloop()
+#terminadoo

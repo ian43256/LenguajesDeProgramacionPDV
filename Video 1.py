@@ -19,5 +19,5 @@ raiz.geometry("650x350")
 # Cambiar el color de fondo (bg = background)
 raiz.config(bg="red")
 
-# 7. Bucle infinito para mantener la ventana en ejecución (debe ir siempre al final)
+# Bucle infinito para mantener la ventana en ejecución (debe ir siempre al final)
 raiz.mainloop()

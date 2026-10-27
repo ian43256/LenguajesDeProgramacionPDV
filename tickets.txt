@@ -88,3 +88,46 @@ Cambio:             $   60.80
    ¡Gracias por su compra!
 
 
+==============================
+         SWEET SHOP
+==============================
+Ticket: #0001
+Cajero: admin
+Cliente: Yayo (Regular)
+------------------------------
+3 x Gomitas         $   45.00
+4 x Chicles         $   32.00
+3 x Regaliz         $   36.00
+------------------------------
+Subtotal:           $  113.00
+IVA 16%:            $   18.08
+==============================
+TOTAL:              $  131.08
+Paga con:           $  500.00
+Cambio:             $  368.92
+==============================
+   ¡Gracias por su compra!
+
+
+==============================
+         SWEET SHOP
+==============================
+   PRECIOS CON IVA INCLUIDO
+==============================
+Ticket: #0001
+Cajero: admin
+Cliente: luis (Regular)
+------------------------------
+3 x Caramelos       $   15.00
+   Sin IVA: $12.93 + IVA 16%: $2.07
+------------------------------
+Subtotal sin IVA:   $   12.93
+IVA 16% incluido:   $    2.07
+==============================
+TOTAL CON IVA:      $   15.00
+Paga con:           $  700.00
+Cambio:             $  685.00
+==============================
+   ¡Gracias por su compra!
+
+
