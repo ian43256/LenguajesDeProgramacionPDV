@@ -1,0 +1,4 @@
+Cliente: JOSE EDUARDO | Membresía: VIP | Ticket: #0001 | Compra: $54.29 | Atendió: admin
+Cliente: LEONARDO | Membresía: Regular | Ticket: #0002 | Compra: $149.64 | Atendió: admin
+Cliente: Cerrito | Membresía: Regular | Ticket: #0001 | Compra: $271.44 | Pagó: $500.00 | Cambio: $228.56 | Atendió: admin
+Cliente: Yurem | Membresía: Regular | Ticket: #0001 | Compra: $139.20 | Pagó: $200.00 | Cambio: $60.80 | Atendió: admin

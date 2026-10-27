@@ -1,0 +1,8 @@
+Cajero PIN: 1234 | Cliente: LEMONADO | Dulces: Chocolates, Gomitas, Paletas | Total: $40.50 | Notas: PENDEJO
+Cajero PIN: 1234 | Cliente: YUREMNACOLUNA | Dulces: Chocolates, Paletas | Total: $30.00 | Notas: PENDEJO X 2
+Cajero PIN: 1234 | Cliente: JOHNPITON | Membresía: VIP | Dulces: Chocolates, Gomitas, Caramelos, Malvaviscos | Total: $58.50 | Notas: JOHN PITON
+Cajero PIN: 1234 | Cliente: Ian | Membresía: VIP | Dulces: Chocolates, Paletas, Caramelos, Malvaviscos | Total: $54.00 | Notas: qwee
+Ticket: #0001 | Cajero: admin | Cliente: JOSE EDUARDO | Membresía: VIP | Dulces: Caramelos, Pulparindos, Gomitas ácidas, Brownies | Subtotal: $52.00 | IVA: $7.49 | Total: $54.29 | Notas: 
+Ticket: #0002 | Cajero: admin | Cliente: LEONARDO | Membresía: Regular | Dulces: Chocolates, Gomitas, Paletas, Caramelos, Chicles, Malvaviscos, Galletas, Mazapanes, Pulparindos, Regaliz | Subtotal: $129.00 | IVA: $20.64 | Total: $149.64 | Notas: 
+Ticket: #0001 | Cajero: admin | Cliente: Cerrito | Membresía: Regular | Dulces: 18x Chicles, 2x Mazapanes, 2x Gomitas ácidas, 4x Bombones | Subtotal: $234.00 | IVA: $37.44 | Total: $271.44 | Pagó: $500.00 | Cambio: $228.56 | Notas: 
+Ticket: #0001 | Cajero: admin | Cliente: Yurem | Membresía: Regular | Dulces: 3x Chocolates, 2x Galletas, 2x Regaliz | Subtotal: $120.00 | IVA: $19.20 | Total: $139.20 | Pagó: $200.00 | Cambio: $60.80 | Notas: 
